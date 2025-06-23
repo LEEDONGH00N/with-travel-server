@@ -1,14 +1,10 @@
 package com.arom.with_travel.domain.accompanies.model;
 
 import com.arom.with_travel.domain.accompanies.dto.request.AccompanyPostRequest;
-import com.arom.with_travel.domain.accompanyComment.AccompanyComment;
-import com.arom.with_travel.domain.accompanyReviews.AccompanyReviews;
 import com.arom.with_travel.domain.image.Image;
 import com.arom.with_travel.domain.likes.Likes;
 import com.arom.with_travel.domain.member.Member;
 import com.arom.with_travel.global.entity.BaseEntity;
-import com.arom.with_travel.global.exception.BaseException;
-import com.arom.with_travel.global.exception.error.ErrorCode;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -67,8 +63,6 @@ public class Accompany extends BaseEntity {
     @NotNull
     private Long views = 0L;
 
-    private Long likeCounts = 0L;
-
     @Column
     @Enumerated(EnumType.STRING)
     private Continent continent;
@@ -85,17 +79,20 @@ public class Accompany extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "accompanies")
+    @OneToMany(mappedBy = "accompany")
     private List<AccompanyReviews> accompanyReviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "accompanies")
+    @OneToMany(mappedBy = "accompany")
     private List<AccompanyApply> accompanyApplies = new ArrayList<>();
 
-    @OneToMany(mappedBy = "accompanies")
+    @OneToMany(mappedBy = "accompany")
     private List<Image> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "accompany")
     private List<AccompanyComment> accompanyComments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "accompany")
+    private List<Likes> likes = new ArrayList<>();
 
     @Builder
     public Accompany(LocalTime startTime,
@@ -135,21 +132,6 @@ public class Accompany extends BaseEntity {
 
     public Long getOwnerId(){
         return member.getId();
-    }
-
-    public Long showLikes(){
-        return likeCounts;
-    }
-
-    public void increaseLikeCount() {
-        this.likeCounts++;
-    }
-
-    public void decreaseLikeCount() {
-        if (this.likeCounts <= 0) {
-           throw BaseException.from(ErrorCode.ACCOMPANY_LIKES_UNABLE_DECREASE);
-        }
-        this.likeCounts--;
     }
 
     public static Accompany from(AccompanyPostRequest request){

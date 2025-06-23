@@ -1,4 +1,4 @@
-package com.arom.with_travel.domain.accompanies.repository.accompanyApply;
+package com.arom.with_travel.domain.accompanies.repository.accompany;
 
 import com.arom.with_travel.domain.accompanies.model.AccompanyApply;
 import com.arom.with_travel.domain.member.Member;

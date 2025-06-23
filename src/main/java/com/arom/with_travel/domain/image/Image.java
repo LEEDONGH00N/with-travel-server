@@ -33,7 +33,7 @@ public class Image extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accompanies_id")
-    private Accompany accompanies;
+    private Accompany accompany;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

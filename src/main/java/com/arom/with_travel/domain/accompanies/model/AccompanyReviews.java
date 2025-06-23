@@ -1,6 +1,5 @@
-package com.arom.with_travel.domain.accompanyReviews;
+package com.arom.with_travel.domain.accompanies.model;
 
-import com.arom.with_travel.domain.accompanies.model.Accompany;
 import com.arom.with_travel.domain.member.Member;
 import com.arom.with_travel.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -27,7 +26,7 @@ public class AccompanyReviews extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accompanies_id")
-    private Accompany accompanies;
+    private Accompany accompany;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

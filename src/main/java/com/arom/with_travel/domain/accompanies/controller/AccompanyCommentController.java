@@ -1,9 +1,9 @@
-package com.arom.with_travel.domain.accompanyComment.controller;
+package com.arom.with_travel.domain.accompanies.controller;
 
-import com.arom.with_travel.domain.accompanyComment.dto.request.AccompanyNewCommentRequest;
-import com.arom.with_travel.domain.accompanyComment.dto.request.AccompanyUpdateCommentRequest;
-import com.arom.with_travel.domain.accompanyComment.dto.response.AccompanyCommentSliceResponse;
-import com.arom.with_travel.domain.accompanyComment.service.AccompanyCommentService;
+import com.arom.with_travel.domain.accompanies.dto.request.AccompanyNewCommentRequest;
+import com.arom.with_travel.domain.accompanies.dto.request.AccompanyUpdateCommentRequest;
+import com.arom.with_travel.domain.accompanies.dto.response.AccompanyCommentSliceResponse;
+import com.arom.with_travel.domain.accompanies.service.AccompanyCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;

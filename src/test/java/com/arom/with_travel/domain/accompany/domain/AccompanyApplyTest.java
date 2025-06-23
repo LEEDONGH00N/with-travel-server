@@ -30,7 +30,7 @@ public class AccompanyApplyTest {
         AccompanyApply apply = AccompanyApply.apply(accompany, member);
 
         // then
-        assertThat(apply.getAccompanies())
+        assertThat(apply.getAccompany())
                 .isEqualTo(accompany);
 
         assertThat(apply.getMember())

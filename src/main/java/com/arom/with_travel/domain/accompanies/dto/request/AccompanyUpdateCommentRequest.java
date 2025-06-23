@@ -1,4 +1,4 @@
-package com.arom.with_travel.domain.accompanyComment.dto.request;
+package com.arom.with_travel.domain.accompanies.dto.request;
 
 import lombok.Getter;
 

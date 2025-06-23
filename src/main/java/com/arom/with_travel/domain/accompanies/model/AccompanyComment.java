@@ -1,7 +1,6 @@
-package com.arom.with_travel.domain.accompanyComment;
+package com.arom.with_travel.domain.accompanies.model;
 
-import com.arom.with_travel.domain.accompanies.model.Accompany;
-import com.arom.with_travel.domain.accompanyComment.dto.request.AccompanyNewCommentRequest;
+import com.arom.with_travel.domain.accompanies.dto.request.AccompanyNewCommentRequest;
 import com.arom.with_travel.domain.member.Member;
 import com.arom.with_travel.global.entity.BaseEntity;
 import com.arom.with_travel.global.exception.BaseException;

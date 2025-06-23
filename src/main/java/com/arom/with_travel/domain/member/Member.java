@@ -2,14 +2,13 @@ package com.arom.with_travel.domain.member;
 
 import com.arom.with_travel.domain.accompanies.model.Accompany;
 import com.arom.with_travel.domain.accompanies.model.AccompanyApply;
-import com.arom.with_travel.domain.accompanyReviews.AccompanyReviews;
+import com.arom.with_travel.domain.accompanies.model.AccompanyReviews;
 import com.arom.with_travel.domain.chat.Chat;
 import com.arom.with_travel.domain.chat.ChatPart;
 import com.arom.with_travel.domain.community.Community;
 import com.arom.with_travel.domain.community_reply.CommunityReply;
 import com.arom.with_travel.domain.image.Image;
 import com.arom.with_travel.domain.likes.Likes;
-import com.arom.with_travel.domain.notification.Notification;
 import com.arom.with_travel.domain.shorts.Shorts;
 import com.arom.with_travel.domain.shorts_reply.ShortsReply;
 import com.arom.with_travel.domain.survey.Survey;
@@ -17,7 +16,6 @@ import com.arom.with_travel.global.entity.BaseEntity;
 import com.arom.with_travel.global.exception.BaseException;
 import com.arom.with_travel.global.exception.error.ErrorCode;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -133,7 +131,7 @@ public class Member extends BaseEntity {
 
     public void validateNotAlreadyAppliedTo(Accompany accompany) {
         boolean alreadyApplied = accompanyApplies.stream()
-                .anyMatch(apply -> apply.getAccompanies().equals(accompany));
+                .anyMatch(apply -> apply.getAccompany().equals(accompany));
         if (alreadyApplied) {
             throw BaseException.from(ErrorCode.TMP_ERROR);
         }

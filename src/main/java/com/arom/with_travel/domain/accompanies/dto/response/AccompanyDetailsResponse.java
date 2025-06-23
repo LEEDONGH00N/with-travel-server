@@ -26,7 +26,7 @@ public class AccompanyDetailsResponse {
     private Long views;
     private Long likes;
 
-    public static AccompanyDetailsResponse from(Accompany accompany){
+    public static AccompanyDetailsResponse from(Accompany accompany, long likes){
         return AccompanyDetailsResponse.builder()
                 .continent(accompany.getContinent())
                 .country(accompany.getCountry())
@@ -42,7 +42,7 @@ public class AccompanyDetailsResponse {
                 .maxParticipants(accompany.getMaxParticipants())
                 .writer(accompany.getMember().getNickname())
                 .views(accompany.getViews())
-                .likes(accompany.showLikes())
+                .likes(likes)
                 .build();
     }
 }

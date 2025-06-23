@@ -6,6 +6,7 @@ import com.arom.with_travel.domain.accompanies.dto.response.AccompanyDetailsResp
 import com.arom.with_travel.domain.accompanies.model.City;
 import com.arom.with_travel.domain.accompanies.model.Continent;
 import com.arom.with_travel.domain.accompanies.model.Country;
+import com.arom.with_travel.domain.accompanies.service.AccompanyApplyService;
 import com.arom.with_travel.domain.accompanies.service.AccompanyService;
 import com.arom.with_travel.domain.accompanies.swagger.PostNewAccompany;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,6 +30,7 @@ import java.util.List;
 public class AccompanyController {
 
     private final AccompanyService accompanyService;
+    private final AccompanyApplyService accompanyApplyService;
 
     @PostNewAccompany
     @PostMapping
@@ -42,13 +44,13 @@ public class AccompanyController {
     }
 
     @PatchMapping("/{accompanyId}/like")
-    public void doLike(@PathVariable Long accompanyId){
-        accompanyService.toggleLike(accompanyId, 1L);
+    public boolean doLike(@PathVariable Long accompanyId){
+        return accompanyService.toggleLike(accompanyId, 1L);
     }
 
     @PostMapping("/{accompanyId}/apply")
     public String doApply(@PathVariable Long accompanyId){
-        return accompanyService.applyAccompany(accompanyId, 1L);
+        return accompanyApplyService.applyAccompany(accompanyId, 1L);
     }
 
     @GetMapping

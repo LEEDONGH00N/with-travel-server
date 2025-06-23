@@ -1,6 +1,6 @@
-package com.arom.with_travel.domain.accompanyComment.dto.response;
+package com.arom.with_travel.domain.accompanies.dto.response;
 
-import com.arom.with_travel.domain.accompanyComment.AccompanyComment;
+import com.arom.with_travel.domain.accompanies.model.AccompanyComment;
 import lombok.Builder;
 import lombok.Getter;
 

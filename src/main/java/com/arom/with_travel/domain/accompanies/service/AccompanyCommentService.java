@@ -1,13 +1,12 @@
-package com.arom.with_travel.domain.accompanyComment.service;
+package com.arom.with_travel.domain.accompanies.service;
 
 import com.arom.with_travel.domain.accompanies.model.Accompany;
 import com.arom.with_travel.domain.accompanies.repository.accompany.AccompanyRepository;
-import com.arom.with_travel.domain.accompanyComment.AccompanyComment;
-import com.arom.with_travel.domain.accompanyComment.dto.request.AccompanyNewCommentRequest;
-import com.arom.with_travel.domain.accompanyComment.dto.response.AccompanyCommentResponse;
-import com.arom.with_travel.domain.accompanyComment.dto.request.AccompanyUpdateCommentRequest;
-import com.arom.with_travel.domain.accompanyComment.dto.response.AccompanyCommentSliceResponse;
-import com.arom.with_travel.domain.accompanyComment.repository.AccompanyCommentRepository;
+import com.arom.with_travel.domain.accompanies.model.AccompanyComment;
+import com.arom.with_travel.domain.accompanies.dto.request.AccompanyNewCommentRequest;
+import com.arom.with_travel.domain.accompanies.dto.request.AccompanyUpdateCommentRequest;
+import com.arom.with_travel.domain.accompanies.dto.response.AccompanyCommentSliceResponse;
+import com.arom.with_travel.domain.accompanies.repository.accompany.AccompanyCommentRepository;
 import com.arom.with_travel.domain.member.Member;
 import com.arom.with_travel.domain.member.repository.MemberRepository;
 import com.arom.with_travel.global.exception.BaseException;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

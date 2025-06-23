@@ -26,15 +26,15 @@ public class AccompanyApply extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accompany_id")
-    private Accompany accompanies;
+    private Accompany accompany;
 
     // 신청 회원
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private AccompanyApply(Accompany accompanies, Member member) {
-        this.accompanies = accompanies;
+    private AccompanyApply(Accompany accompany, Member member) {
+        this.accompany = accompany;
         this.member = member;
     }
 

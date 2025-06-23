@@ -1,6 +1,6 @@
-package com.arom.with_travel.domain.accompanyComment.repository;
+package com.arom.with_travel.domain.accompanies.repository.accompany;
 
-import com.arom.with_travel.domain.accompanyComment.AccompanyComment;
+import com.arom.with_travel.domain.accompanies.model.AccompanyComment;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;

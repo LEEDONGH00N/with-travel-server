@@ -11,9 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,17 +24,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
-    // 사용자 ID별로 여러 SseEmitter를 저장 (멀티 디바이스 대응)
+
     private final Map<Long, List<SseEmitter>> emitters = new ConcurrentHashMap<>();
     private final NotificationRepository notificationRepository;
 
-    // 사용자별 SSE 구독 등록
     public SseEmitter subscribe(Long userId) {
-        // 타임아웃은 30분 설정 (필요에 따라 조정)
         SseEmitter emitter = new SseEmitter(30 * 60 * 1000L);
         emitters.computeIfAbsent(userId, key -> new CopyOnWriteArrayList<>()).add(emitter);
 
-        // 연결 종료 또는 오류 발생 시 emitter 제거
         emitter.onCompletion(() -> removeEmitter(userId, emitter));
         emitter.onTimeout(() -> removeEmitter(userId, emitter));
         emitter.onError((e) -> removeEmitter(userId, emitter));
@@ -40,21 +39,13 @@ public class NotificationService {
         return emitter;
     }
 
-    // 알림 전송 메서드
+    @Transactional
     public void sendNotification(AccompanyAppliedEvent event) {
-        List<SseEmitter> userEmitters = emitters.get(event.getOwnerId());
+        // 알림 메시지 생성
         String notificationMessage = event.getProposerNickName() + NotificationProperties.ACCOMPANY_APPLY_MESSAGE;
         String targetUrl = NotificationProperties.ACCOMPANY_NOTICE_TARGET_URL_PREFIX + event.getAccompanyId();
-        if (userEmitters != null) {
-            // 등록된 모든 emitter에 알림 전송
-            for (SseEmitter emitter : userEmitters) {
-                try {
-                    emitter.send(SseEmitter.event().name("notification").data(notificationMessage));
-                } catch (IOException e) {
-                    removeEmitter(event.getOwnerId(), emitter);
-                }
-            }
-        }
+
+        // 1️⃣ DB 먼저 저장 (장애 발생 시 유실 방지)
         Notification notification = Notification.from(
                 event.getProposerId(),
                 event.getOwnerId(),
@@ -63,6 +54,25 @@ public class NotificationService {
                 event.getOccurredAt()
         );
         notificationRepository.save(notification);
+
+        // 2️⃣ 등록된 emitter 들에 push
+        List<SseEmitter> userEmitters = emitters.get(event.getOwnerId());
+        if (userEmitters != null) {
+            List<SseEmitter> deadEmitters = new ArrayList<>();
+
+            for (SseEmitter emitter : userEmitters) {
+                try {
+                    emitter.send(SseEmitter.event()
+                            .name("notification")
+                            .data(NotificationResponse.from(notification))); // DTO로 변환 가능
+                } catch (IOException e) {
+                    deadEmitters.add(emitter);
+                }
+            }
+
+            // 3️⃣ 실패한 emitter 제거
+            userEmitters.removeAll(deadEmitters);
+        }
     }
 
     public Slice<NotificationResponse> getNotifications(Long receiverId, int page, int size) {
@@ -71,7 +81,6 @@ public class NotificationService {
         return notifications.map(NotificationResponse::from);
     }
 
-    // emitter 제거
     private void removeEmitter(Long userId, SseEmitter emitter) {
         List<SseEmitter> userEmitters = emitters.get(userId);
         if (userEmitters != null) {

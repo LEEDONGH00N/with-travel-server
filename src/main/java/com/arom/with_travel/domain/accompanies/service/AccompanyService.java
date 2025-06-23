@@ -1,6 +1,5 @@
 package com.arom.with_travel.domain.accompanies.service;
 
-import com.arom.with_travel.domain.accompanies.dto.event.AccompanyAppliedEvent;
 import com.arom.with_travel.domain.accompanies.dto.response.AccompanyBriefResponse;
 import com.arom.with_travel.domain.accompanies.model.Accompany;
 import com.arom.with_travel.domain.accompanies.model.AccompanyApply;
@@ -8,7 +7,7 @@ import com.arom.with_travel.domain.accompanies.dto.request.AccompanyPostRequest;
 import com.arom.with_travel.domain.accompanies.dto.response.AccompanyDetailsResponse;
 import com.arom.with_travel.domain.accompanies.model.Country;
 import com.arom.with_travel.domain.accompanies.repository.accompany.AccompanyRepository;
-import com.arom.with_travel.domain.accompanies.repository.accompanyApply.AccompanyApplyRepository;
+import com.arom.with_travel.domain.accompanies.repository.accompany.AccompanyApplyRepository;
 import com.arom.with_travel.domain.likes.Likes;
 import com.arom.with_travel.domain.likes.repository.LikesRepository;
 import com.arom.with_travel.domain.member.Member;
@@ -49,41 +48,25 @@ public class AccompanyService {
     }
 
     @Transactional
-    public void toggleLike(Long accompanyId, Long memberId){
+    public boolean toggleLike(Long accompanyId, Long memberId){
         Member member = loadMemberOrThrow(memberId);
         Accompany accompany = loadAccompanyOrThrow(accompanyId);
         Optional<Likes> like = loadLikes(accompany, member);
         if (like.isPresent()) {
             likesRepository.delete(like.get());
-            accompany.decreaseLikeCount();
-            return;
+            return false;
         }
         Likes newLike = Likes.create(member, accompany);
         likesRepository.save(newLike);
-        accompany.increaseLikeCount();
+        return true;
     }
 
     @Transactional
     public AccompanyDetailsResponse showDetails(Long accompanyId){
         Accompany accompany = loadAccompanyOrThrow(accompanyId);
         accompany.addView();
-        return AccompanyDetailsResponse.from(accompany);
-    }
-
-    @Transactional
-    public String applyAccompany(Long accompanyId, Long memberId){
-        Accompany accompany = loadAccompanyOrThrow(accompanyId);
-        Member proposer = loadMemberOrThrow(memberId);
-        proposer.validateNotAlreadyAppliedTo(accompany);
-        AccompanyAppliedEvent event = new AccompanyAppliedEvent(
-                accompany.getId(),
-                accompany.getOwnerId(),
-                proposer.getId(),
-                proposer.getNickname()
-        );
-        applyRepository.save(AccompanyApply.apply(accompany, proposer));
-        eventPublisher.publishEvent(event);
-        return "참가 신청이 완료됐습니다.";
+        long likesCount = countLikes(accompany);
+        return AccompanyDetailsResponse.from(accompany, likesCount);
     }
 
     @Transactional(readOnly = true)
@@ -93,7 +76,6 @@ public class AccompanyService {
         return accompanyList.map(AccompanyBriefResponse::from);
     }
 
-    // 임시 조회 코드
     private Member loadMemberOrThrow(Long memberId){
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> BaseException.from(ErrorCode.MEMBER_NOT_FOUND));
@@ -102,6 +84,14 @@ public class AccompanyService {
     private Accompany loadAccompanyOrThrow(Long accompanyId){
         return accompanyRepository.findById(accompanyId)
                 .orElseThrow(() -> BaseException.from(ErrorCode.ACCOMPANY_NOT_FOUND));
+    }
+
+    private Optional<Likes> loadLikes(Accompany accompany, Member member) {
+        return likesRepository.findByAccompanyAndMember(accompany, member);
+    }
+
+    private long countLikes(Accompany accompany) {
+        return likesRepository.countByAccompanyId(accompany.getId());
     }
 
     //내가 등록한 동행 정보들
@@ -113,7 +103,7 @@ public class AccompanyService {
 
         List<AccompanyDetailsResponse> response = new ArrayList<>();
         for(Accompany accompany : accompanies){
-            if(!isFinish(accompany)) response.add(AccompanyDetailsResponse.from(accompany));
+            if(!isFinish(accompany)) response.add(AccompanyDetailsResponse.from(accompany, countLikes(accompany)));
         }
         return response;
     }
@@ -124,8 +114,8 @@ public class AccompanyService {
         List<AccompanyApply> accompanyApplies = applyRepository.findAccompanyAppliesByMember(member);
         List<AccompanyDetailsResponse> response = new ArrayList<>();
         for(AccompanyApply accompanyApply : accompanyApplies){
-            if(isFinish(accompanyApply.getAccompanies())) continue;
-            response.add(AccompanyDetailsResponse.from(accompanyApply.getAccompanies()));
+            if(isFinish(accompanyApply.getAccompany())) continue;
+            response.add(AccompanyDetailsResponse.from(accompanyApply.getAccompany(), countLikes(accompanyApply.getAccompany())));
         }
         return response;
     }
@@ -138,7 +128,7 @@ public class AccompanyService {
 
         List<AccompanyDetailsResponse> response = new ArrayList<>();
         for(Accompany accompany : accompanies){
-            if(isFinish(accompany)) response.add(AccompanyDetailsResponse.from(accompany));
+            if(isFinish(accompany)) response.add(AccompanyDetailsResponse.from(accompany, countLikes(accompany)));
         }
         return response;
     }
@@ -150,10 +140,6 @@ public class AccompanyService {
         // true면 지난 동행임
         if(now.compareTo(endDate)>0) return true;
         return false;
-    }
-
-    private Optional<Likes> loadLikes(Accompany accompany, Member member) {
-        return likesRepository.findByAccompanyAndMember(accompany, member);
     }
 }
 
