@@ -31,6 +31,9 @@ public enum ErrorCode {
 
     //survey
     SURVEY_NOT_FOUND("SVY-0000", "해당 설문이 존재하지 않습니다.", ErrorDisplayType.POPUP),
+    INVALID_SURVEY_ANSWER("SVY-0001", "설문 답변이 비어있습니다.", ErrorDisplayType.POPUP),
+    OVER_ANSWER_LIMIT("SVY-0002", "답변 개수가 초과되었습니다..", ErrorDisplayType.POPUP),
+    INVALID_SURVEY_QUESTION("SVY-0003", "설문 질문이 비어있습니다.", ErrorDisplayType.POPUP),
     ;
 
 

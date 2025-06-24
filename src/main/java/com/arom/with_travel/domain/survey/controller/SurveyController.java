@@ -1,6 +1,6 @@
+// SurveyController.java
 package com.arom.with_travel.domain.survey.controller;
 
-import com.arom.with_travel.domain.survey.Survey;
 import com.arom.with_travel.domain.survey.dto.request.SurveyRequestDto;
 import com.arom.with_travel.domain.survey.dto.response.SurveyResponseDto;
 import com.arom.with_travel.domain.survey.service.SurveyService;
@@ -24,12 +24,12 @@ public class SurveyController {
 
     @PostNewSurvey
     @PostMapping("/surveys")
-    public SurveyResponseDto createSurvey(
+    public void createSurvey(
             HttpServletRequest request,
             @RequestBody SurveyRequestDto dto
     ) {
         String email = tokenProvider.getMemberLoginEmail(request);
-        return surveyService.createSurvey(email, dto);
+        surveyService.createSurvey(email, dto);
     }
 
     @GetSingleSurvey
