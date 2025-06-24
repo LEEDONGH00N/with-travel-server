@@ -17,7 +17,7 @@ import com.arom.with_travel.domain.member.repository.MemberRepository;
 import com.arom.with_travel.domain.redis.RedisPublisher;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactory; 
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

@@ -4,6 +4,7 @@ import com.arom.with_travel.domain.accompanies.dto.response.AccompanyDetailsResp
 import com.arom.with_travel.domain.accompanies.service.AccompanyService;
 import com.arom.with_travel.domain.member.dto.MemberProfileRequestDto;
 import com.arom.with_travel.domain.member.dto.MemberProfileResponseDto;
+import com.arom.with_travel.domain.member.service.MemberProfileService;
 import com.arom.with_travel.domain.member.service.MemberService;
 import com.arom.with_travel.global.jwt.service.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,21 +22,21 @@ import java.util.List;
 public class MemberProfileController {
 
     private final TokenProvider tokenProvider;
-    private final AccompanyService accompanyService;
+    private final MemberProfileService memberProfileService;
 
     @GetMapping("/myPostAccompany")
     public List<AccompanyDetailsResponse> myPost(HttpServletRequest request, @RequestBody MemberProfileRequestDto requestDto){
-        return accompanyService.myPostAccompany(tokenProvider.getMemberLoginEmail(request),requestDto);
+        return memberProfileService.myPostAccompany(tokenProvider.getMemberLoginEmail(request),requestDto);
     }
 
     @GetMapping("/myApplyAccompany")
     public List<AccompanyDetailsResponse> myApply(HttpServletRequest request, @RequestBody MemberProfileRequestDto requestDto){
-        return accompanyService.myApplyAccompany(tokenProvider.getMemberLoginEmail(request),requestDto);
+        return memberProfileService.myApplyAccompany(tokenProvider.getMemberLoginEmail(request),requestDto);
     }
 
     @GetMapping("/myPastAccompany")
     public List<AccompanyDetailsResponse> myPast(HttpServletRequest request, @RequestBody MemberProfileRequestDto requestDto){
-        return accompanyService.myPastAccompany(tokenProvider.getMemberLoginEmail(request),requestDto);
+        return memberProfileService.myPastAccompany(tokenProvider.getMemberLoginEmail(request),requestDto);
     }
 
 }

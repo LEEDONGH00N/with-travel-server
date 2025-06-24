@@ -26,7 +26,7 @@ import java.util.List;
 //        })
 @SQLDelete(sql = "UPDATE member SET is_deleted = true, deleted_at = now() where id = ?")
 @SQLRestriction("is_deleted is FALSE")
-public class Accompany extends BaseEntity {
+public class    Accompany extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
