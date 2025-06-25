@@ -1,4 +1,4 @@
-package com.arom.with_travel.domain.accompany.domain;
+package com.arom.with_travel.domain.accompany.model;
 
 import com.arom.with_travel.domain.accompanies.model.Accompany;
 import com.arom.with_travel.domain.accompanies.model.AccompanyApply;
@@ -8,9 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class AccompanyApplyTest {

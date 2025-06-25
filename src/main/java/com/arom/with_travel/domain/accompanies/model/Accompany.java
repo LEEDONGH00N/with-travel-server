@@ -80,9 +80,6 @@ public class    Accompany extends BaseEntity {
     private Member member;
 
     @OneToMany(mappedBy = "accompany")
-    private List<AccompanyReviews> accompanyReviews = new ArrayList<>();
-
-    @OneToMany(mappedBy = "accompany")
     private List<AccompanyApply> accompanyApplies = new ArrayList<>();
 
     @OneToMany(mappedBy = "accompany")

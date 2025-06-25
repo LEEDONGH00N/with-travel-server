@@ -31,7 +31,6 @@ import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 @DataJpaTest
 @ActiveProfiles("test")
-@ExtendWith(SpringExtension.class)
 @SuppressWarnings("NonAsciiCharacters")
 public class AccompanyRepositoryTest {
 
@@ -42,7 +41,7 @@ public class AccompanyRepositoryTest {
     private AccompanyPostRequest request;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         request = new AccompanyPostRequest();
         accompanyPostRequestSetUp();
         accompany = Accompany.from(request);
@@ -63,16 +62,17 @@ public class AccompanyRepositoryTest {
     }
 
     private void accompanyPostRequestSetUp() {
-        setField(request, "continentName", Continent.ASIA);
-        setField(request, "countryName", Country.JAPAN);
-        setField(request, "cityName", City.TOKYO);
+        setField(request, "continent", Continent.ASIA);
+        setField(request, "country", Country.JAPAN);
+        setField(request, "city", City.TOKYO);
         setField(request, "accompanyType", AccompanyType.EVENT);
         setField(request, "destination", "도쿄");
         setField(request, "startDate", LocalDate.of(2025, 5, 1));
         setField(request, "startTime", LocalTime.of(10, 0));
-        setField(request, "endTime", LocalDate.of(2025, 5, 10));
+        setField(request, "endDate", LocalDate.of(2025, 5, 2));
+        setField(request, "endTime", LocalTime.of(11, 0));
         setField(request, "title", "도쿄 여행 메이트 모집");
         setField(request, "description", "10일간 도쿄 여행하실 분 구합니다.");
-        setField(request, "registerCount", 3);
+        setField(request, "maxParticipants", 3);
     }
 }

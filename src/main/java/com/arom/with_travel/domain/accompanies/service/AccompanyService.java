@@ -35,8 +35,6 @@ public class AccompanyService {
     private final AccompanyRepository accompanyRepository;
     private final MemberRepository memberRepository;
     private final LikesRepository likesRepository;
-    private final AccompanyApplyRepository applyRepository;
-    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public String createAccompany(AccompanyPostRequest request, Long memberId) {
@@ -62,7 +60,7 @@ public class AccompanyService {
     }
 
     @Transactional
-    public AccompanyDetailsResponse showDetails(Long accompanyId){
+    public AccompanyDetailsResponse showAccompanyDetails(Long accompanyId){
         Accompany accompany = loadAccompanyOrThrow(accompanyId);
         accompany.addView();
         long likesCount = countLikes(accompany);
@@ -70,7 +68,7 @@ public class AccompanyService {
     }
 
     @Transactional(readOnly = true)
-    public Slice<AccompanyBriefResponse> getAccompaniesBrief(Country country, int size, Long lastId){
+    public Slice<AccompanyBriefResponse> showAccompaniesBrief(Country country, int size, Long lastId){
         Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Slice<Accompany> accompanyList = accompanyRepository.findByCountry(country, lastId, pageable);
         return accompanyList.map(AccompanyBriefResponse::from);
@@ -88,6 +86,10 @@ public class AccompanyService {
 
     private Optional<Likes> loadLikes(Accompany accompany, Member member) {
         return likesRepository.findByAccompanyAndMember(accompany, member);
+    }
+
+    private long countLikes(Accompany accompany){
+        return likesRepository.countByAccompanyId(accompany.getId());
     }
 }
 

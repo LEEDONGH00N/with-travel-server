@@ -3,8 +3,8 @@ package com.arom.with_travel.domain.member.service;
 import com.arom.with_travel.domain.accompanies.dto.response.AccompanyDetailsResponse;
 import com.arom.with_travel.domain.accompanies.model.Accompany;
 import com.arom.with_travel.domain.accompanies.model.AccompanyApply;
+import com.arom.with_travel.domain.accompanies.repository.accompany.AccompanyApplyRepository;
 import com.arom.with_travel.domain.accompanies.repository.accompany.AccompanyRepository;
-import com.arom.with_travel.domain.accompanies.repository.accompanyApply.AccompanyApplyRepository;
 import com.arom.with_travel.domain.member.Member;
 import com.arom.with_travel.domain.member.dto.MemberProfileRequestDto;
 import com.arom.with_travel.domain.member.repository.MemberRepository;
@@ -34,7 +34,7 @@ public class MemberProfileService {
 
         List<AccompanyDetailsResponse> response = new ArrayList<>();
         for(Accompany accompany : accompanies){
-            if(!isFinish(accompany)) response.add(AccompanyDetailsResponse.from(accompany));
+            if(!isFinish(accompany)) response.add(AccompanyDetailsResponse.from(accompany, 1L));
         }
         return response;
     }
@@ -45,8 +45,8 @@ public class MemberProfileService {
         List<AccompanyApply> accompanyApplies = applyRepository.findAccompanyAppliesByMember(member);
         List<AccompanyDetailsResponse> response = new ArrayList<>();
         for(AccompanyApply accompanyApply : accompanyApplies){
-            if(isFinish(accompanyApply.getAccompanies())) continue;
-            response.add(AccompanyDetailsResponse.from(accompanyApply.getAccompanies()));
+            if(isFinish(accompanyApply.getAccompany())) continue;
+            response.add(AccompanyDetailsResponse.from(accompanyApply.getAccompany(), 1L));
         }
         return response;
     }
@@ -59,7 +59,7 @@ public class MemberProfileService {
 
         List<AccompanyDetailsResponse> response = new ArrayList<>();
         for(Accompany accompany : accompanies){
-            if(isFinish(accompany)) response.add(AccompanyDetailsResponse.from(accompany));
+            if(isFinish(accompany)) response.add(AccompanyDetailsResponse.from(accompany, 1L));
         }
         return response;
     }

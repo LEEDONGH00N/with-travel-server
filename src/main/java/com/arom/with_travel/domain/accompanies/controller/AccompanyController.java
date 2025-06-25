@@ -40,7 +40,7 @@ public class AccompanyController {
 
     @GetMapping("/{accompanyId}")
     public AccompanyDetailsResponse showAccompanyDetails(@PathVariable Long accompanyId){
-        return accompanyService.showDetails(accompanyId);
+        return accompanyService.showAccompanyDetails(accompanyId);
     }
 
     @PatchMapping("/{accompanyId}/like")
@@ -57,9 +57,8 @@ public class AccompanyController {
     public Slice<AccompanyBriefResponse> showAccompaniesBrief(
             @RequestParam(value = "country", required = false) Country country,
             @RequestParam(required = false) Long lastId,
-            @RequestParam(defaultValue = "10") int size
-    ){
-        return accompanyService.getAccompaniesBrief(country, size, lastId);
+            @RequestParam(defaultValue = "10") int size){
+        return accompanyService.showAccompaniesBrief(country, size, lastId);
     }
     
 }

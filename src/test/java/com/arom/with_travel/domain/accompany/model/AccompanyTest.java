@@ -1,17 +1,13 @@
-package com.arom.with_travel.domain.accompany.domain;
+package com.arom.with_travel.domain.accompany.model;
 
 import com.arom.with_travel.domain.accompanies.dto.request.AccompanyPostRequest;
 import com.arom.with_travel.domain.accompanies.model.Accompany;
 import com.arom.with_travel.domain.accompany.AccompanyFixture;
 import com.arom.with_travel.domain.member.Member;
-import com.arom.with_travel.global.exception.BaseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 @SuppressWarnings("NonAsciiCharacters")

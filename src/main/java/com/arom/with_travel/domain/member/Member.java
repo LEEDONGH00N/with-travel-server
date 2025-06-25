@@ -88,9 +88,6 @@ public class Member extends BaseEntity {
     private List<AccompanyApply> accompanyApplies = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
-    private List<AccompanyReviews> accompanyReviews = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member")
     private List<Community> communities = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
